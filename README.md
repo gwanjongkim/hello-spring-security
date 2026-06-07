@@ -1,3 +1,10 @@
+flowchart TD A[클라이언트 HTTP 요청] --> B[Servlet Container<br/>Tomcat] B --> C[DelegatingFilterProxy<br/>springSecurityFilterChain으로 위임] C --> D[FilterChainProxy<br/>요청에 맞는 SecurityFilterChain 선택] D --> E[SecurityFilterChain 실행] E --> F[SecurityContext 관련 필터<br/>기존 로그인 세션 확인] F --> G[CSRF / Header / Logout 관련 필터] G --> H{요청 URL 확인} H -->|/, /login, /signup,<br/>/css/**, /js/**, /images/**| I[permitAll<br/>인증 없이 접근 허용] I --> Z[DispatcherServlet → Controller 실행] H -->|POST /login| J[UsernamePasswordAuthenticationFilter<br/>이메일/비밀번호 추출] J --> K[AuthenticationManager] K --> L[DaoAuthenticationProvider] L --> M[CustomUserDetailsService<br/>DB에서 이메일로 사용자 조회] M --> N[BCryptPasswordEncoder<br/>비밀번호 검증] N -->|인증 성공| O[Authentication 객체 생성] O --> P[SecurityContext 저장] P --> Q[HTTP Session 생성/유지] Q --> R[JSESSIONID 쿠키 발급] R --> S[/home으로 이동] N -->|인증 실패| T[/login?error로 이동] H -->|/admin/**| U{ROLE_ADMIN 권한 확인} H -->|/products/add,<br/>/products/*/edit,<br/>/products/*/delete,<br/>POST /products| U H -->|그 외 요청| V{로그인 여부 확인} V -->|인증됨| Z V -->|미인증| W[/login으로 리다이렉트] U -->|ADMIN 권한 있음| Z U -->|ADMIN 권한 없음| X[403 Forbidden<br/>접근 거부] Z --> Y[응답 반환]
+
+
+
+
+
+
 # Spring Boot 4 + Spring Security 7 실습
 
 Spring Boot 4 / Spring Security 7을 이용한 Session 기반 인증 실습 프로젝트입니다.
