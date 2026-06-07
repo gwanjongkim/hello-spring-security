@@ -36,7 +36,6 @@ public class ProductController {
         }
 
         model.addAttribute("productPage", productPage);
-        model.addAttribute("products", productPage.getContent());
         model.addAttribute("keyword", normalizedKeyword);
 
         return "products/list";

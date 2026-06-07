@@ -14,8 +14,10 @@ import java.util.NoSuchElementException;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class ProductService {
 
+    private final ProductRepository productRepository;
 
     // 전체 목록 페이징 (Pageable → findAll에 그대로 전달)
     public Page<Product> getProducts(Pageable pageable) {
